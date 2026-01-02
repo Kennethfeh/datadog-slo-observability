@@ -66,4 +66,4 @@ export DD_API_KEY=... DD_APP_KEY=...
 
 ## Why it matters
 
-Recruiters and hiring managers can see how I turn instrumentation requirements into runnable assets: app code, monitors, dashboards, and runbooks all live together. Drop this into your own Datadog org to demo SLO reporting, latency alerting, and deployment correlations.
+This repo keeps instrumentation requirements, app code, dashboards, and automation in one place so you can see how everything fits together. Drop it into a Datadog org to demo SLO reporting, latency alerting, and deployment correlations end to end.
