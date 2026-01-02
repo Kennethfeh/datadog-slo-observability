@@ -1,0 +1,15 @@
+{
+  "name": "Checkout error budget burn",
+  "type": "query alert",
+  "query": "avg(last_30m):(sum:checkout.requests{outcome:error}.as_count() / sum:checkout.requests{*}.as_count()) > 0.02",
+  "message": "Error budget burn exceeds 2% for checkout-api. Engage on-call, capture recent deployments, and pause rollouts.\n\n@slack-platform-alerts",
+  "tags": ["service:checkout-api", "env:prod", "slo:error-budget"],
+  "options": {
+    "thresholds": {
+      "critical": 0.02,
+      "warning": 0.015
+    },
+    "notify_no_data": false,
+    "include_tags": true
+  }
+}

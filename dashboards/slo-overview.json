@@ -1,0 +1,40 @@
+{
+  "title": "Checkout Reliability Overview",
+  "description": "Curated widgets for latency, error budget, deployments, and synthetic checks.",
+  "layout_type": "ordered",
+  "widgets": [
+    {
+      "definition": {
+        "title": "p95 latency",
+        "type": "timeseries",
+        "requests": [
+          {
+            "q": "p95:checkout.request_duration_ms{service:checkout-api,env:prod}",
+            "display_type": "line"
+          }
+        ]
+      }
+    },
+    {
+      "definition": {
+        "title": "Error budget",
+        "type": "query_value",
+        "requests": [
+          {
+            "q": "sum:checkout.requests{outcome:error}.as_count() / sum:checkout.requests{*}.as_count()",
+            "aggregator": "avg"
+          }
+        ],
+        "autoscale": true
+      }
+    },
+    {
+      "definition": {
+        "title": "Recent orders",
+        "type": "log_stream",
+        "indexes": ["main"],
+        "query": "service:checkout-api @evt:""order completed"""
+      }
+    }
+  ]
+}

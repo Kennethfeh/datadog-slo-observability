@@ -1,0 +1,19 @@
+{
+  "name": "Checkout API p95 latency",
+  "type": "query alert",
+  "query": "avg(last_5m):p95:checkout.request_duration_ms{service:checkout-api} > 350",
+  "message": "p95 checkout latency degraded above 350ms. Triage the release linked in the event stream and roll back if the budget is threatened.\n\n@pagerduty",
+  "tags": ["service:checkout-api", "env:prod"],
+  "options": {
+    "evaluation_delay": 300,
+    "escalation_message": "Latency sustained for 15m.",
+    "notify_audit": false,
+    "locked": false,
+    "timeout_h": 0,
+    "include_tags": true,
+    "require_full_window": true,
+    "new_host_delay": 300,
+    "notify_no_data": true,
+    "no_data_timeframe": 10
+  }
+}
