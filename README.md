@@ -1,6 +1,6 @@
 # Datadog SLO Observability
 
-This project demonstrates how I wire an API, Datadog instrumentation, and SLO collateral together. It includes a small checkout service, StatsD metrics, tracing via `dd-trace`, dashboards, monitors, and scripts for deployment events.
+This project wires an API, Datadog instrumentation, and SLO collateral together. It includes a small checkout service, StatsD metrics, tracing via `dd-trace`, dashboards, monitors, and scripts for deployment events.
 
 ## What's inside
 
