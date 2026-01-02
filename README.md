@@ -12,6 +12,19 @@ This project demonstrates how I wire an API, Datadog instrumentation, and SLO co
 | `scripts/publish-deployment-event.sh` | Helper to send deployment events to Datadog's event stream (requires `DD_API_KEY`/`DD_APP_KEY`). |
 | `scripts/synthetic-check.sh` | cURL-based synthetic test that exercises `/healthz` and `/api/checkout`; adapt for Datadog Synthetics.
 
+## Configuration
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `PORT` | `4600` | HTTP port for the Express API. |
+| `DD_SERVICE` | `checkout-api` | Service name used for traces, metrics, and structured logs. |
+| `DD_ENV` | `dev` | Environment tag applied to Datadog telemetry. |
+| `APP_VERSION` | `1.0.0` | Version tag for traces/metrics and `/healthz` response. |
+| `DD_AGENT_HOST` | `127.0.0.1` | Host where the Datadog Agent/StatsD listener runs. |
+| `DD_DOGSTATSD_PORT` | `8125` | UDP port for StatsD metrics. |
+| `LOG_LEVEL` | `info` | Pino log level. |
+| `DD_API_KEY`/`DD_APP_KEY` | _(none)_ | Required by `scripts/publish-deployment-event.sh` when sending deployment events. |
+
 ## Running locally
 
 ```bash
@@ -38,6 +51,13 @@ Before promoting a new build, send a deployment event so dashboards can correlat
 export DD_API_KEY=... DD_APP_KEY=...
 ./scripts/publish-deployment-event.sh SERVICE=checkout-api ENVIRONMENT=prod VERSION=$(git rev-parse --short HEAD)
 ```
+
+## Observability flow
+
+- **Traces:** `dd-trace` records spans (e.g., `checkout.submit`) with `DD_SERVICE`, `DD_ENV`, and `APP_VERSION` tags so APM dashboards can slice historical latency per deploy.
+- **Metrics:** `hot-shots` pushes StatsD metrics such as `checkout.request_duration_ms`, `checkout.requests`, and `checkout.orders_created` into the Datadog Agent. These feed the bundled monitors.
+- **Logs:** `pino` emits JSON structured logs; with log injection enabled, trace IDs appear automatically so you can jump from a monitor to the relevant request log.
+- **Runbooks:** Dashboard/monitor JSON plus the deployment-event script keep app code, alerting, and operational hooks together.
 
 ## Dashboard & monitor import
 
